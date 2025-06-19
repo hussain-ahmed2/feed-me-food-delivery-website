@@ -4,9 +4,7 @@ import { MenuList } from "./menu-list";
 export default function ExploreMenu() {
 	return (
 		<section className="space-y-8">
-			<h2 className="font-semibold text-2xl sm:text-3xl md:text-4xl lg:6xl">
-				Explore our menu
-			</h2>
+			<h2 className="heading">Explore our menu</h2>
 			<p className="text-gray-700">
 				Chose from a diverse menu featuring a delectable array of
 				dishes. Our mission is to satisfy your carvings and elevate your
