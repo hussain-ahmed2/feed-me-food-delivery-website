@@ -4,7 +4,7 @@ import Navbar from "@/components/navbar/navbar";
 import Provider from "./context-provider";
 import { ToastContainer } from "react-toastify";
 
-const outfit = Outfit();
+const outfit = Outfit({ subsets: ["latin"] });
 
 export const metadata = {
 	title: "FeedMe",
