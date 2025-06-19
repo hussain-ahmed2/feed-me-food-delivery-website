@@ -1,4 +1,5 @@
 import { createContext, use, useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 export const AuthContext = createContext({});
 
@@ -15,9 +16,11 @@ export const AuthProvider = ({ children }) => {
 			});
 			const data = await response.json();
 			if (data.success) setUser(data.user);
+			toast.success(data.message);
 			return data;
 		} catch (error) {
 			console.error(error);
+			toast.error(error.message);
 			return { success: false, message: "Something went wrong!" };
 		} finally {
 			setIsLoading(false);
@@ -33,9 +36,11 @@ export const AuthProvider = ({ children }) => {
 			});
 			const data = await response.json();
 			if (data.success) setUser(data.user);
+			toast.success(data.message);
 			return data;
 		} catch (error) {
 			console.error(error);
+			toast.error(error.message);
 			return { success: false, message: "Something went wrong!" };
 		} finally {
 			setIsLoading(false);
@@ -50,9 +55,11 @@ export const AuthProvider = ({ children }) => {
 			});
 			const data = await response.json();
 			if (data.success) setUser(null);
+			toast.success(data.message);
 			return data;
 		} catch (error) {
 			console.error(error);
+			toast.error(error.message);
 			return { success: false, message: "Something went wrong!" };
 		} finally {
 			setIsLoading(false);
