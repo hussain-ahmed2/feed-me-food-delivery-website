@@ -3,8 +3,8 @@ import Link from "next/link";
 const links = [
 	{ name: "Home", href: "/" },
 	{ name: "Menu", href: "/#menu" },
-	{ name: "Download App", href: "/#download-app" },
-	{ name: "Contact Us", href: "/#contact-us" },
+	{ name: "Dishes", href: "/dishes" },
+	{ name: "Contact Us", href: "#contact-us" },
 ];
 
 export default function NavLinks({ isMenuOpen, closeMenu }) {
