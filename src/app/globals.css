@@ -1,6 +1,20 @@
 @import "tailwindcss";
 @import 'tailwind-scrollbar-hide/v4';
 
+@theme {
+  --animate-fade-in: fadeIn 1s;
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+
+    to {
+      opacity: 1;
+    }
+  }
+}
+
 @layer base {
   html {
     scroll-behavior: smooth;
@@ -14,7 +28,7 @@
 
 @layer components {
   .page {
-    @apply min-h-screen px-4 py-24 max-w-7xl mx-auto flex flex-col;
+    @apply min-h-screen px-4 py-24 max-w-7xl mx-auto flex flex-col animate-fade-in;
   }
 
   .nav-link {
