@@ -12,7 +12,7 @@ export default function DishesGrid() {
 				<div>Loading top dishes...</div>
 			) : topDishes.length ? (
 				<>
-					<div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+					<div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 animate-fade-in">
 						{topDishes.map((product) => (
 							<Product key={product._id} product={product} />
 						))}

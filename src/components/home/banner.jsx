@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export default function Banner() {
 	return (
-		<section className="relative rounded-lg overflow-hidden">
+		<section className="relative rounded-lg overflow-hidden animate-fade-in">
 			<Image
 				className="w-full min-h-60 object-cover"
 				src="/images/banner.png"

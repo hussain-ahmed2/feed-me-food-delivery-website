@@ -3,7 +3,7 @@ import CartButtons from "./cart-buttons";
 
 export default function Product({ product }) {
 	return (
-		<article className="rounded-xl overflow-hidden bg-white border-2 border-gray-200 shadow hover:scale-102 hover:shadow-lg hover:border-emerald-500/80 transition transform duration-300">
+		<article className="rounded-xl overflow-hidden bg-white border-2 border-gray-200 shadow hover:scale-102 hover:shadow-lg hover:border-emerald-500/80 transition transform duration-300 animate-fade-in">
 			<div className="w-full relative">
 				<Image
 					src={product.image}
