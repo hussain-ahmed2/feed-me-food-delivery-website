@@ -78,7 +78,10 @@ export default function CartPage() {
 						</div>
 						<div>
 							<div className="w-1/6 ml-auto">
-								<Link href="/order" className="btn px-10 py-3">
+								<Link
+									href="/order"
+									className="btn px-10 py-3 text-center"
+								>
 									Checkout
 								</Link>
 							</div>
