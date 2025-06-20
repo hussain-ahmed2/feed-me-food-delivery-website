@@ -3,6 +3,7 @@ import "./globals.css";
 import Navbar from "@/components/navbar/navbar";
 import Provider from "./context-provider";
 import { ToastContainer } from "react-toastify";
+import Footer from "@/components/footer";
 
 const outfit = Outfit({ subsets: ["latin"] });
 
@@ -24,6 +25,7 @@ export default function RootLayout({ children }) {
 						<Navbar />
 					</header>
 					<main>{children}</main>
+					<Footer />
 				</Provider>
 			</body>
 		</html>
