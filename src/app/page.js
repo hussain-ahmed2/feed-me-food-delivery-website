@@ -1,3 +1,4 @@
+import AppDownload from "@/components/home/app-download";
 import Banner from "@/components/home/banner";
 import Menu from "@/components/home/explore-menu";
 import TopDishes from "@/components/home/top-dishes";
@@ -8,6 +9,7 @@ export default function Home() {
 			<Banner />
 			<Menu />
 			<TopDishes />
+			<AppDownload />
 		</div>
 	);
 }
