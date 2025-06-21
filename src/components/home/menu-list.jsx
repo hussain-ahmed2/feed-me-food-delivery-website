@@ -1,14 +1,10 @@
-"use client";
-
-import { useShop } from "@/context/shop-context";
 import Image from "next/image";
 
 export function MenuList({ menu_image, menu_name }) {
-	const { category, pickCategory } = useShop();
-
+	const category = "all";
 	return (
 		<li
-			onClick={() => pickCategory(menu_name)}
+			// onClick={() => pickCategory(menu_name)}
 			className="space-y-3 text-center"
 		>
 			<div

@@ -1,42 +1,45 @@
-import { useShop } from "@/context/shop-context";
-import { useRouter, useSearchParams } from "next/navigation";
+"use client";
 
-export default function Pagination() {
-	const { page, setPage, total, limit, fetchDishes } = useShop();
-	const totalPages = Math.ceil(total / limit);
-	const router = useRouter();
-	const params = useSearchParams();
+import { ChevronsLeft, ChevronsRight } from "lucide-react";
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 
-	const handleNavigation = async (newPage) => {
-		const newParams = new URLSearchParams(params.toString());
-		newParams.set("page", newPage.toString());
-		router.push(`?${newParams.toString()}`);
-		setPage(newPage);
-		await fetchDishes(newParams.toString());
+export default function Pagination({
+	page,
+	totalPages,
+	hasNextPage,
+	hasPrevPage,
+}) {
+	const searchParams = useSearchParams();
+
+	const getQueryString = (newPage) => {
+		const params = new URLSearchParams(searchParams);
+		params.set("page", newPage);
+		return `?${params.toString()}`;
 	};
 
 	return (
 		<div className="flex justify-center items-center gap-4 mt-6">
-			{page > 1 && (
-				<button
-					className="btn-secondary"
-					onClick={() => handleNavigation(page - 1)}
+			{hasPrevPage && (
+				<Link
+					href={getQueryString(page - 1)}
+					className="flex items-center hover:underline"
 				>
-					Previous
-				</button>
+					Previous <ChevronsLeft className="h-5" />
+				</Link>
 			)}
 
 			<span>
 				Page {page} of {totalPages}
 			</span>
 
-			{page < totalPages && (
-				<button
-					className="btn-secondary"
-					onClick={() => handleNavigation(page + 1)}
+			{hasNextPage && (
+				<Link
+					href={getQueryString(page + 1)}
+					className="flex items-center hover:underline"
 				>
-					Next
-				</button>
+					Next <ChevronsRight className="h-5" />
+				</Link>
 			)}
 		</div>
 	);

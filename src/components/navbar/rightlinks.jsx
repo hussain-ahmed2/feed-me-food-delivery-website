@@ -1,60 +1,56 @@
-import { useAuth } from "@/context/auth-context";
-import { useShop } from "@/context/shop-context";
-import { ArrowRight, Loader, ShoppingCart, User2 } from "lucide-react";
-import Link from "next/link";
+import { getUser } from "@/actions/auth";
+import { ArrowRight, ShoppingCart, User2 } from "lucide-react";
+import { Suspense } from "react";
+import IconLink from "./icon-link";
 
-export default function RightLinks({ closeMenu }) {
-	const { cart } = useShop();
+export default function RightLinks() {
 	return (
 		<ul className="flex items-center gap-8">
-			<li onClick={closeMenu}>
-				<Link className="icon-link" href="/cart">
+			<li>
+				<IconLink href="/cart">
 					<div className="flex item-center gap-1.5">
 						<span className="relative">
 							<ShoppingCart />
 							<div
 								className={`h-1.25 w-1.25 rounded-full bg-emerald-500 absolute top-0 right-0 transition duration-300 ${
-									cart.length ? "" : "opacity-0 invisible"
+									0 ? "" : "opacity-0 invisible"
 								}`}
 							></div>
 						</span>
 						Cart
 					</div>
-				</Link>
+				</IconLink>
 			</li>
 
-			<ProtectedLinks closeMenu={closeMenu} />
+			<Suspense fallback={<div>Loading...</div>}>
+				<ProtectedLinks />
+			</Suspense>
 		</ul>
 	);
 }
 
-export function ProtectedLinks({ closeMenu }) {
-	const { user, isLoading } = useAuth();
-
+export async function ProtectedLinks() {
+	const user = await getUser();
 	return (
 		<>
-			{isLoading ? (
-				<li className="animate-spin">
-					<Loader />
-				</li>
-			) : user ? (
+			{user ? (
 				<>
-					<li onClick={closeMenu}>
-						<Link className="icon-link" href="/profile">
+					<li>
+						<IconLink href="/profile">
 							<div className="flex items-center gap-1.5">
 								<User2 /> Profile
 							</div>
-						</Link>
+						</IconLink>
 					</li>
 				</>
 			) : (
 				<>
-					<li onClick={closeMenu}>
-						<Link className="icon-link" href="/login">
+					<li>
+						<IconLink href="/login">
 							<div className="flex items-center gap-1.5">
 								<ArrowRight /> Login
 							</div>
-						</Link>
+						</IconLink>
 					</li>
 				</>
 			)}

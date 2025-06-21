@@ -1,5 +1,6 @@
 import Image from "next/image";
 import CartButtons from "./cart-buttons";
+import { Suspense } from "react";
 
 export default function Product({ product }) {
 	return (
@@ -12,7 +13,9 @@ export default function Product({ product }) {
 					alt={product.name}
 					className="w-full object-cover aspect-[4/3]"
 				/>
-				<CartButtons product={product} />
+				<Suspense fallback={<div>Loading...</div>}>
+					<CartButtons id={product._id.toString()} />
+				</Suspense>
 			</div>
 			<div className="p-4 space-y-2.5">
 				<h4 className="font-medium md:text-lg">{product.name}</h4>

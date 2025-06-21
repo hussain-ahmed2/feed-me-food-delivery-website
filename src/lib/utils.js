@@ -1,5 +1,6 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import { toast } from "react-toastify";
 
 export async function hashPassword(password) {
 	const salt = await bcrypt.genSalt(10);
@@ -22,12 +23,53 @@ export function decodeToken(token) {
 	return payload;
 }
 
-export async function getUser() {
-	const response = await fetch("/api/auth/user");
-	const data = await response.json();
-	return data;
-}
-
 export function capitalize(string = "") {
 	return string.charAt(0).toUpperCase() + string.slice(1);
 }
+
+export const register = async (credentials = {}) => {
+	try {
+		const response = await fetch("/api/auth/register", {
+			body: JSON.stringify(credentials),
+			method: "POST",
+		});
+		const data = await response.json();
+		toast.success(data.message);
+		return data;
+	} catch (error) {
+		console.error(error);
+		toast.error(error.message);
+		return { success: false, message: "Something went wrong!" };
+	}
+};
+
+export const login = async (credentials = {}) => {
+	try {
+		const response = await fetch("/api/auth/login", {
+			body: JSON.stringify(credentials),
+			method: "POST",
+		});
+		const data = await response.json();
+		toast.success(data.message);
+		return data;
+	} catch (error) {
+		console.error(error);
+		toast.error(error.message);
+		return { success: false, message: "Something went wrong!" };
+	}
+};
+
+export const logout = async () => {
+	try {
+		const response = await fetch("/api/auth/logout", {
+			method: "POST",
+		});
+		const data = await response.json();
+		toast.success(data.message);
+		return data;
+	} catch (error) {
+		console.error(error);
+		toast.error(error.message);
+		return { success: false, message: "Something went wrong!" };
+	}
+};

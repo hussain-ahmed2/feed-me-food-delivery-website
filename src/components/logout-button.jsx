@@ -1,21 +1,23 @@
 "use client";
-import { useAuth } from "@/context/auth-context";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
+import { useActionState } from "react";
+import { logout } from "@/lib/utils";
 
 export default function LogoutButton() {
-	const { logout, isLoading } = useAuth();
+	const router = useRouter();
+	const [state, formAction, isPending] = useActionState(action, null);
 
-	async function handleClick() {
-		await logout();
-		redirect("/login");
+	async function action() {
+		const res = await logout();
+		if (res.success) {
+			router.refresh();
+		}
 	}
 	return (
-		<button
-			onClick={handleClick}
-			className="btn-danger"
-			disabled={isLoading}
-		>
-			Logout
-		</button>
+		<form action={formAction}>
+			<button type="submit" className="btn-danger" disabled={isPending}>
+				Logout
+			</button>
+		</form>
 	);
 }

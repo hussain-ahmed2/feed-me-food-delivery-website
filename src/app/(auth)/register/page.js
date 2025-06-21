@@ -1,13 +1,13 @@
 "use client";
 
 import InputField from "@/components/input-field";
-import { useAuth } from "@/context/auth-context";
 import Link from "next/link";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useActionState, useRef } from "react";
+import { register } from "@/lib/utils";
 
-export default function LoginPage() {
-	const { register } = useAuth();
+export default function RegisterPage() {
+	const router = useRouter();
 
 	const action = async (prevState, formData) => {
 		const form = Object.fromEntries(formData.entries());
@@ -19,7 +19,9 @@ export default function LoginPage() {
 			focusInputField(fieldName);
 		}
 
-		if (data.success) redirect("/profile");
+		if (data.success) {
+			router.refresh();
+		}
 
 		return { form, ...data };
 	};

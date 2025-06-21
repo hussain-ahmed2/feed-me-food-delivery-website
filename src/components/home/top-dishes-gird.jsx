@@ -1,19 +1,15 @@
-"use client";
-
 import Product from "./product";
 import Link from "next/link";
-import { useShop } from "@/context/shop-context";
+import { getDishes } from "@/actions/shop";
 
-export default function DishesGrid() {
-	const { topDishes, isLoading } = useShop();
+export default async function DishesGrid() {
+	const { dishes } = await getDishes({ limit: 4 });
 	return (
 		<div>
-			{isLoading ? (
-				<div>Loading top dishes...</div>
-			) : topDishes.length ? (
+			{dishes.length ? (
 				<>
 					<div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 animate-fade-in">
-						{topDishes.map((product) => (
+						{dishes.map((product) => (
 							<Product key={product._id} product={product} />
 						))}
 					</div>

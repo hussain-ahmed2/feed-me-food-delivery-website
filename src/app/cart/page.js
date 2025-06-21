@@ -1,12 +1,15 @@
-"use client";
-
-import { useShop } from "@/context/shop-context";
+import {
+	addToCart,
+	deleteFromCart,
+	getCart,
+	removeFromCart,
+} from "@/actions/shop";
 import { Minus, Plus, Trash2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
-export default function CartPage() {
-	const { cart, deleteFromCart, addToCart, removeFromCart } = useShop();
+export default async function CartPage() {
+	const cart = await getCart();
 
 	return (
 		<div className="page animate-fade-in">
@@ -39,35 +42,20 @@ export default function CartPage() {
 								<div className="w-1/6">{item.name}</div>
 								<div className="w-1/6">${item.price}</div>
 								<div className="w-1/6 flex items-center gap-1 justify-center">
-									<button
-										onClick={() => removeFromCart(item)}
-										className="bg-rose-100 p-2 rounded-full hover:text-rose-500 transition transform duration-300 active:scale-95 active:bg-white"
-									>
-										<Minus className="size-5" />
-									</button>
+									<Add id={item._id.toString()} />
 									<div>x{item.quantity}</div>
-									<button
-										onClick={() => addToCart(item)}
-										className="bg-emerald-100 p-2 rounded-full hover:text-emerald-500 transition transform duration-300 active:scale-95 active:bg-white"
-									>
-										<Plus className="size-5" />
-									</button>
+									<Remove id={item._id.toString()} />
 								</div>
 								<div className="w-1/6">
 									${(item.quantity * item.price).toFixed(2)}
 								</div>
 								<div className="w-1/6">
-									<button
-										onClick={() => deleteFromCart(item)}
-										className="p-2 rounded-full bg-gray-100 hover:bg-gray-200 active:bg-gray-100 transition duration-300 hover:text-rose-500"
-									>
-										<Trash2 />
-									</button>
+									<Delete id={item._id.toString()} />
 								</div>
 							</div>
 						))}
-						<div className="flex flex-col py-4">
-							<div className="self-end w-1/6 font-medium">
+						<div className="flex items-center gap-8 justify-end py-4">
+							<div className="font-medium">
 								Grand Total: $
 								{cart.reduce(
 									(acc, item) =>
@@ -75,9 +63,7 @@ export default function CartPage() {
 									0
 								)}
 							</div>
-						</div>
-						<div>
-							<div className="w-1/6 ml-auto">
+							<div className="">
 								<Link
 									href="/order"
 									className="btn px-10 py-3 text-center"
@@ -94,3 +80,36 @@ export default function CartPage() {
 		</div>
 	);
 }
+
+const Add = async ({ id }) => {
+	return (
+		<form action={addToCart}>
+			<input type="hidden" value={id} name="id" />
+			<button className="bg-emerald-100 p-2 rounded-full hover:text-emerald-500 transition transform duration-300 active:scale-95 active:bg-white">
+				<Plus className="size-5" />
+			</button>
+		</form>
+	);
+};
+
+const Remove = async ({ id }) => {
+	return (
+		<form action={removeFromCart}>
+			<input type="hidden" value={id} name="id" />
+			<button className="bg-rose-100 p-2 rounded-full hover:text-rose-500 transition transform duration-300 active:scale-95 active:bg-white">
+				<Minus className="size-5" />
+			</button>
+		</form>
+	);
+};
+
+const Delete = async ({ id }) => {
+	return (
+		<form action={deleteFromCart}>
+			<input type="hidden" name="id" value={id} />
+			<button className="p-2 rounded-full bg-gray-100 hover:bg-gray-200 active:bg-gray-100 transition duration-300 hover:text-rose-500">
+				<Trash2 />
+			</button>
+		</form>
+	);
+};

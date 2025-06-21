@@ -1,4 +1,8 @@
+"use client";
+
 import Link from "next/link";
+import { use } from "react";
+import { NavbarContext } from "@/context/NavbarContext";
 
 const links = [
 	{ name: "Home", href: "/" },
@@ -7,7 +11,8 @@ const links = [
 	{ name: "Contact Us", href: "#contact-us" },
 ];
 
-export default function NavLinks({ isMenuOpen, closeMenu }) {
+export default function NavLinks() {
+	const { isMenuOpen, closeMenu } = use(NavbarContext);
 	return (
 		<ul
 			className={`fixed z-50 top-20 left-0 right-0 max-md:bg-white md:static flex flex-col md:items-center md:flex-row md:gap-8 max-md:border-b max-md:border-gray-200 transition transform duration-300 origin-right ${
