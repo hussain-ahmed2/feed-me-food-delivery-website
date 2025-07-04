@@ -13,9 +13,9 @@ export default function Product({ product }) {
 					alt={product.name}
 					className="w-full object-cover aspect-[4/3]"
 				/>
-				<Suspense fallback={<div>Loading...</div>}>
+				{/* <Suspense fallback={<div>Loading...</div>}>
 					<CartButtons id={product._id.toString()} />
-				</Suspense>
+				</Suspense> */}
 			</div>
 			<div className="p-4 space-y-2.5">
 				<h4 className="font-medium md:text-lg">{product.name}</h4>
