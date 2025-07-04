@@ -26,18 +26,64 @@ A full-stack food delivery web application built with **Next.js** and **MongoDB*
 
 ## 📁 Project Structure
 
-feed-me/
-│
-├── app/ or pages/ # Next.js App Router or Pages Router
-├── components/ # Reusable UI components
-├── models/ # Mongoose models (e.g., Product, Order)
-├── lib/ # DB connection utils
-├── public/ # Static assets (images, icons)
-├── styles/ # Global styles (if using CSS Modules or Tailwind)
-├── .env.local # Environment variables
-├── package.json
-├── README.md
-└── next.config.js
+```
+feed-me-food-delivery-website/
+├── src/                         # Source code
+│   ├── app/                     # Next.js App Router
+│   │   ├── (auth)/              # Authentication routes group
+│   │   │   ├── login/
+│   │   │   ├── profile/
+│   │   │   └── register/
+│   │   ├── api/                 # API routes
+│   │   │   ├── auth/            # Authentication API endpoints
+│   │   │   └── products/        # Products API endpoints
+│   │   ├── cart/                # Cart page
+│   │   ├── dishes/              # Dishes page
+│   │   ├── order/               # Order page
+│   │   ├── layout.js            # Root layout
+│   │   ├── page.js              # Home page
+│   │   └── globals.css          # Global styles
+│   ├── components/              # React components
+│   │   ├── dishes/              # Dishes related components
+│   │   ├── home/                # Home page components
+│   │   ├── navbar/              # Navigation components
+│   │   └── skeletons/           # Loading skeleton components
+│   ├── context/                 # Context providers for state management
+│   │   ├── CartContext.jsx
+│   │   └── NavbarContext.jsx
+│   ├── actions/                 # Server actions and logic
+│   │   ├── auth.js
+│   │   └── shop.js
+│   ├── mongodb/                 # MongoDB related files
+│   │   ├── models/              # Database models
+│   │   │   ├── product.js
+│   │   │   └── user.js
+│   │   └── connectDB.js         # Database connection
+│   ├── hooks/                   # Custom React hooks
+│   │   ├── useCookie.js
+│   │   └── useDebounce.js
+│   ├── lib/                     # Utility functions and libraries
+│   │   ├── menu-list.js
+│   │   └── utils.js
+│   └── middleware.js            # Next.js middleware
+├── public/                      # Static files
+│   ├── images/                  # Image assets
+│   │   ├── app_store.png
+│   │   ├── banner.png
+│   │   ├── homepage.png
+│   │   ├── menu_*.png           # Menu category images
+│   │   ├── play_store.png
+│   │   └── rating_stars.png
+│   └── *.svg                    # SVG icons
+├── .env.local                   # Environment variables
+├── .gitignore                   # Git ignore file
+├── eslint.config.mjs            # ESLint configuration
+├── jsconfig.json                # JavaScript configuration
+├── next.config.mjs              # Next.js configuration
+├── package.json                 # Package dependencies
+├── postcss.config.mjs           # PostCSS configuration
+└── README.md                    # Project documentation
+```
 
 ---
 
