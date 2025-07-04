@@ -1,46 +1,80 @@
-"use client";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
-import { ChevronsLeft, ChevronsRight } from "lucide-react";
-import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+export default function Pagination({ currentPage, totalPages, onPageChange }) {
+	const createPageArray = () => {
+		const pages = [];
 
-export default function Pagination({
-	page,
-	totalPages,
-	hasNextPage,
-	hasPrevPage,
-}) {
-	const searchParams = useSearchParams();
+		if (totalPages <= 5) {
+			for (let i = 1; i <= totalPages; i++) pages.push(i);
+		} else {
+			if (currentPage <= 3) {
+				pages.push(1, 2, 3, "...", totalPages);
+			} else if (currentPage >= totalPages - 2) {
+				pages.push(
+					1,
+					"...",
+					totalPages - 2,
+					totalPages - 1,
+					totalPages
+				);
+			} else {
+				pages.push(1, "...", currentPage, "...", totalPages);
+			}
+		}
 
-	const getQueryString = (newPage) => {
-		const params = new URLSearchParams(searchParams);
-		params.set("page", newPage);
-		return `?${params.toString()}`;
+		return pages;
 	};
 
+	const pages = createPageArray();
+
 	return (
-		<div className="flex justify-center items-center gap-4 mt-6">
-			{hasPrevPage && (
-				<Link
-					href={getQueryString(page - 1)}
-					className="flex items-center hover:underline"
-				>
-					Previous <ChevronsLeft className="h-5" />
-				</Link>
+		<div className="flex gap-2 items-center justify-center mt-6">
+			{/* Previous */}
+			<button
+				disabled={currentPage === 1}
+				onClick={() => onPageChange(currentPage - 1)}
+				className={`w-9 h-9 rounded-full flex items-center justify-center border transition cursor-pointer disabled:cursor-not-allowed ${
+					currentPage === 1
+						? "bg-gray-100 text-gray-400 cursor-not-allowed"
+						: "bg-white border-emerald-500 text-emerald-500 hover:bg-emerald-100"
+				}`}
+			>
+				<ChevronLeft size={16} />
+			</button>
+
+			{/* Page Numbers */}
+			{pages.map((page, index) =>
+				page === "..." ? (
+					<span key={index} className="px-2 text-gray-500">
+						...
+					</span>
+				) : (
+					<button
+						key={index}
+						onClick={() => onPageChange(page)}
+						className={`w-9 h-9 rounded-full flex items-center justify-center border transition cursor-pointer disabled:cursor-not-allowed ${
+							page === currentPage
+								? "bg-emerald-500 text-white"
+								: "bg-white border-emerald-500 text-emerald-500 hover:bg-emerald-100"
+						}`}
+					>
+						{page}
+					</button>
+				)
 			)}
 
-			<span>
-				Page {page} of {totalPages}
-			</span>
-
-			{hasNextPage && (
-				<Link
-					href={getQueryString(page + 1)}
-					className="flex items-center hover:underline"
-				>
-					Next <ChevronsRight className="h-5" />
-				</Link>
-			)}
+			{/* Next */}
+			<button
+				disabled={currentPage === totalPages}
+				onClick={() => onPageChange(currentPage + 1)}
+				className={`w-9 h-9 rounded-full flex items-center justify-center border transition cursor-pointer disabled:cursor-not-allowed ${
+					currentPage === totalPages
+						? "bg-gray-100 text-gray-400 cursor-not-allowed"
+						: "bg-white border-emerald-500 text-emerald-500 hover:bg-emerald-100"
+				}`}
+			>
+				<ChevronRight size={16} />
+			</button>
 		</div>
 	);
 }
