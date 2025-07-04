@@ -1,30 +1,34 @@
-import { getDishes } from "@/actions/shop";
+"use client";
+
 import Product from "../home/product";
 import Pagination from "./pagination";
+import ProductsSkeleton from "../skeletons/products-skeleton";
 
-export default async function DishesGrid({
-	search_query = "",
-	limit = 12,
-	page = 1,
+export default function DishesGrid({
+	products,
+	loading,
+	page,
+	totalPages,
+	handlePageChange,
 }) {
-	const { dishes, pagination } = await getDishes({
-		limit,
-		page,
-		search_query,
-	});
-
 	return (
 		<div>
-			{dishes.length ? (
+			{loading ? (
+				<ProductsSkeleton />
+			) : products.length ? (
 				<>
 					<div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-						{dishes.map((product) => (
+						{products.map((product) => (
 							<Product key={product._id} product={product} />
 						))}
 					</div>
 
 					{/* Pagination */}
-					<Pagination {...pagination} />
+					<Pagination
+						totalPages={totalPages}
+						currentPage={page}
+						onPageChange={handlePageChange}
+					/>
 				</>
 			) : (
 				<div>No dishes found!</div>
