@@ -16,8 +16,16 @@ export async function GET(req) {
 
 		const total = await Product.countDocuments(query);
 		const dishes = await Product.find(query).skip(skip).limit(limit);
+		const totalPages = Math.ceil(total / limit);
 
-		return NextResponse.json({ success: true, dishes, total });
+		return NextResponse.json({
+			success: true,
+			dishes,
+			total,
+			page,
+			limit,
+			totalPages,
+		});
 	} catch (error) {
 		console.error(error);
 		return NextResponse.json(
