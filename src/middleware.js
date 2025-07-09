@@ -6,7 +6,7 @@ export function middleware(request) {
 
 	const protectedPaths = ["/login", "/register"];
 
-	if (!token && request.nextUrl.pathname.startsWith("/profile")) {
+	if (!token && (request.nextUrl.pathname.startsWith("/profile") || request.nextUrl.pathname.startsWith("/cart"))) {
 		return NextResponse.redirect(new URL("/login", request.url));
 	}
 

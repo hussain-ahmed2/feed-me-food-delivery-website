@@ -60,7 +60,6 @@ feed-me-food-delivery-website/
 │   │   │   └── user.js
 │   │   └── connectDB.js         # Database connection
 │   ├── hooks/                   # Custom React hooks
-│   │   ├── useCookie.js
 │   │   └── useDebounce.js
 │   ├── lib/                     # Utility functions and libraries
 │   │   ├── menu-list.js

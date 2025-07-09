@@ -1,7 +1,9 @@
-import { getUser } from "@/actions/auth";
+"use client";
+
 import { ArrowRight, ShoppingCart, User2 } from "lucide-react";
 import { Suspense } from "react";
 import IconLink from "./icon-link";
+import { useAuth } from "@/context/AuthContext";
 
 export default function RightLinks() {
 	return (
@@ -11,11 +13,7 @@ export default function RightLinks() {
 					<div className="flex item-center gap-1.5">
 						<span className="relative">
 							<ShoppingCart />
-							<div
-								className={`h-1.25 w-1.25 rounded-full bg-emerald-500 absolute top-0 right-0 transition duration-300 ${
-									0 ? "" : "opacity-0 invisible"
-								}`}
-							></div>
+							<div className={`h-1.25 w-1.25 rounded-full bg-emerald-500 absolute top-0 right-0 transition duration-300 ${0 ? "" : "opacity-0 invisible"}`}></div>
 						</span>
 						Cart
 					</div>
@@ -29,30 +27,26 @@ export default function RightLinks() {
 	);
 }
 
-export async function ProtectedLinks() {
-	const user = await getUser();
+export function ProtectedLinks() {
+	const { user } = useAuth();
 	return (
 		<>
 			{user ? (
-				<>
-					<li>
-						<IconLink href="/profile">
-							<div className="flex items-center gap-1.5">
-								<User2 /> Profile
-							</div>
-						</IconLink>
-					</li>
-				</>
+				<li>
+					<IconLink href="/profile">
+						<div className="flex items-center gap-1.5">
+							<User2 /> Profile
+						</div>
+					</IconLink>
+				</li>
 			) : (
-				<>
-					<li>
-						<IconLink href="/login">
-							<div className="flex items-center gap-1.5">
-								<ArrowRight /> Login
-							</div>
-						</IconLink>
-					</li>
-				</>
+				<li>
+					<IconLink href="/login">
+						<div className="flex items-center gap-1.5">
+							<ArrowRight /> Login
+						</div>
+					</IconLink>
+				</li>
 			)}
 		</>
 	);

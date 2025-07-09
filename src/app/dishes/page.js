@@ -2,7 +2,7 @@
 
 import DishesGrid from "@/components/dishes/dishes-grid";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 
 export default function DishesPage() {
 	const router = useRouter();
@@ -46,19 +46,21 @@ export default function DishesPage() {
 		};
 
 		fetchProducts();
-	}, [page, searchQuery, router]);
+	}, [page, searchQuery]);
 
 	return (
-		<div className="page space-y-10">
-			<h2 className="heading">All Dishes</h2>
+		<Suspense>
+			<div className="page space-y-10">
+				<h2 className="heading">All Dishes</h2>
 
-			<DishesGrid
-				products={products}
-				loading={loading}
-				page={Number(page)}
-				totalPages={totalPages}
-				handlePageChange={handlePageChange}
-			/>
-		</div>
+				<DishesGrid
+					products={products}
+					loading={loading}
+					page={Number(page)}
+					totalPages={totalPages}
+					handlePageChange={handlePageChange}
+				/>
+			</div>
+		</Suspense>
 	);
 }
