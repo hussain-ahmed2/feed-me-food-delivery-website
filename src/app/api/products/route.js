@@ -6,17 +6,25 @@ export async function GET(req) {
 	try {
 		await connectDB();
 
-		const { searchParams } = new URL(req.url);
-		const category = searchParams.get("category");
-		const page = parseInt(searchParams.get("page")) || 1;
-		const limit = parseInt(searchParams.get("limit")) || 12;
+		const { searchParams } = req.nextUrl;
+		const page = parseInt(searchParams.get("page") || 1);
+		const limit = parseInt(searchParams.get("limit") || 12);
+		const search_query = searchParams.get("search_query") || "";
+		const category = searchParams.get("category") || "";
+
 		const skip = (page - 1) * limit;
+		const searchRegex = new RegExp(search_query, "i");
 
-		const query = category ? { category } : {};
+		const query = search_query ? { name: { $regex: searchRegex } } : {};
 
+		if (category) {
+			query.category = category;
+		}
+		console.log(query);
 		const total = await Product.countDocuments(query);
-		const dishes = await Product.find(query).skip(skip).limit(limit);
 		const totalPages = Math.ceil(total / limit);
+
+		const dishes = await Product.find(query).skip(skip).limit(limit);
 
 		return NextResponse.json({
 			success: true,
@@ -28,9 +36,6 @@ export async function GET(req) {
 		});
 	} catch (error) {
 		console.error(error);
-		return NextResponse.json(
-			{ success: false, message: "Internal server error" },
-			{ status: 500 }
-		);
+		return NextResponse.json({ success: false, message: "Internal server error" }, { status: 500 });
 	}
 }
