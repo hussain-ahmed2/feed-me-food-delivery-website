@@ -47,7 +47,7 @@ export function AuthProvider({ children }) {
 		fetchUser();
 	}, []);
 
-	if (loading) return <div>Loading...</div>;
+	if (loading) return null;
 
 	return <AuthContext value={{ user, loading, register, login }}>{children}</AuthContext>;
 }

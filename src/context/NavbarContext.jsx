@@ -14,9 +14,5 @@ export const Provider = ({ children }) => {
 		if (!isMenuOpen) setIsMenuOpen(true);
 	}
 
-	return (
-		<NavbarContext value={{ isMenuOpen, closeMenu, openMenu }}>
-			{children}
-		</NavbarContext>
-	);
+	return <NavbarContext value={{ isMenuOpen, closeMenu, openMenu, setIsMenuOpen }}>{children}</NavbarContext>;
 };
