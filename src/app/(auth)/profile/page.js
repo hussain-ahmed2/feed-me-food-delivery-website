@@ -7,9 +7,14 @@ export default async function ProfilePage() {
 	if (!user) redirect("/login");
 	return (
 		<section className="page">
-			<h1>ProfilePage</h1>
-			<br />
-			<LogoutButton />
+			<div>
+				<h1 className="text-3xl font-black mb-4">Profile</h1>
+				<div className="flex flex-col items-center gap-4">
+					<h2 className="text-xl font-medium">{user.name}</h2>
+					<p className="text-gray-500">{user.email}</p>
+					<LogoutButton />
+				</div>
+			</div>
 		</section>
 	);
 }
