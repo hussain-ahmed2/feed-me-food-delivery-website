@@ -1,19 +1,18 @@
 "use client";
 
+import { loginUser } from "@/actions/auth";
 import InputField from "@/components/input-field";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useActionState, useRef } from "react";
-import { useAuth } from "@/context/AuthContext";
 
 export default function LoginPage() {
 	const router = useRouter();
-	const { login } = useAuth();
 
 	const action = async (prevState, formData) => {
 		const form = Object.fromEntries(formData.entries());
 
-		const data = await login(form);
+		const data = await loginUser(form);
 
 		if (!data.success && data.errors) {
 			const fieldName = Object.keys(data.errors)[0];

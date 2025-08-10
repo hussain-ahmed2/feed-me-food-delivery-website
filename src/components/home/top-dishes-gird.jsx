@@ -1,9 +1,7 @@
 import Product from "./product";
 import Link from "next/link";
-import { getDishes } from "@/actions/shop";
 
-export default async function DishesGrid() {
-	const { dishes } = await getDishes({ limit: 4 });
+export default function DishesGrid({ dishes }) {
 	return (
 		<div>
 			{dishes.length ? (
@@ -13,10 +11,7 @@ export default async function DishesGrid() {
 							<Product key={product._id} product={product} />
 						))}
 					</div>
-					<Link
-						href="/dishes"
-						className="btn-success mt-5 block w-fit mx-auto"
-					>
+					<Link href="/dishes" className="btn-success mt-5 block w-fit mx-auto">
 						View more
 					</Link>
 				</>

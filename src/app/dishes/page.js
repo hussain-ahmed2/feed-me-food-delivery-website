@@ -1,62 +1,17 @@
-"use client";
-
+import { getDishes } from "@/actions/shop";
 import DishesGrid from "@/components/dishes/dishes-grid";
+import SearchDishes from "@/components/dishes/search-dishes";
 import DropDownMenu from "@/components/DropDownMenu";
-import { useDebounce } from "@/hooks/useDebounce";
-import { useRouter, useSearchParams } from "next/navigation";
-import { Suspense, useEffect, useState } from "react";
+import { Suspense } from "react";
 
-export default function DishesPage() {
-	const router = useRouter();
-	const [products, setProducts] = useState([]);
-	const [loading, setLoading] = useState(true);
-	const [totalPages, setTotalPages] = useState(1);
+export default async function page({ searchParams }) {
+	const searchP = await searchParams;
+	const page = searchP?.page || 1;
+	const category = searchP?.category || "All";
+	const search_query = searchP?.search_query || "";
+	const limit = searchP?.limit || 12;
 
-	const searchParams = useSearchParams();
-	const searchQuery = searchParams.get("search_query") || "";
-	const [searchQ, setSearchQ] = useState(searchQuery);
-	const page = parseInt(searchParams.get("page") || 1);
-	const category = searchParams.get("category") || "";
-	const [categoryFilter, setCategoryFilter] = useState(category);
-	const debouncedSearchQuery = useDebounce(searchQ, 500);
-
-	const handlePageChange = (newPage) => {
-		const searchParams = new URLSearchParams(window.location.search);
-		searchParams.set("page", newPage);
-		router.push(`?${searchParams.toString()}`);
-	};
-
-	useEffect(() => {
-		const fetchProducts = async () => {
-			try {
-				setLoading(true);
-				const params = new URLSearchParams();
-				if (page) params.append("page", page);
-				if (debouncedSearchQuery) {
-					params.append("search_query", debouncedSearchQuery);
-					params.set("page", 1);
-				}
-				if (categoryFilter) {
-					params.append("category", categoryFilter);
-					params.set("page", 1);
-				}
-
-				if (window) window.scrollTo(0, 0);
-				router.push(`?${params.toString()}`);
-
-				const response = await fetch(`/api/products?${params.toString()}`);
-				const data = await response.json();
-				setProducts(data.dishes);
-				setTotalPages(Number(data.totalPages));
-			} catch (error) {
-				console.error("Error fetching products:", error);
-			} finally {
-				setLoading(false);
-			}
-		};
-
-		fetchProducts();
-	}, [page, debouncedSearchQuery, categoryFilter, router]);
+	const { dishes, pagination, params } = await getDishes({ limit, page, search_query, category });
 
 	return (
 		<Suspense>
@@ -66,21 +21,12 @@ export default function DishesPage() {
 				<div className="flex gap-2 items-center justify-between">
 					<div className="flex items-center min-w-1/2 max-sm:flex-col max-sm:items-start max-sm:gap-1">
 						<p className="mr-2">Filter by:</p>
-						<DropDownMenu value={categoryFilter} setValue={setCategoryFilter} />
+						<DropDownMenu value={params.category} />
 					</div>
-					<div className="flex items-center min-w-1/2 max-sm:flex-col max-sm:items-start max-sm:gap-1">
-						<p className="mr-2">Search:</p>
-						<input
-							type="text"
-							value={searchQ}
-							onChange={(e) => setSearchQ(e.target.value)}
-							className="w-full border border-gray-200 p-2 rounded-md outline-none focus:ring-2 focus:border-emerald-500 ring-emerald-500"
-							placeholder="Search dishes..."
-						/>
-					</div>
+					<SearchDishes />
 				</div>
 
-				<DishesGrid products={products} loading={loading} page={Number(page)} totalPages={totalPages} handlePageChange={handlePageChange} />
+				<DishesGrid products={dishes} page={Number(params.page)} totalPages={Number(pagination.totalPages)} />
 			</div>
 		</Suspense>
 	);

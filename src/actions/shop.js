@@ -4,7 +4,7 @@ import { connectDB } from "@/mongodb/connectDB";
 import Product from "@/mongodb/models/product";
 import { cookies } from "next/headers";
 
-export async function getDishes({ limit = 12, page = 1, search_query = "" }) {
+export async function getDishes({ limit = 12, page = 1, search_query = "", category = "All" }) {
 	try {
 		await connectDB();
 
@@ -13,7 +13,7 @@ export async function getDishes({ limit = 12, page = 1, search_query = "" }) {
 		const skip = (parsedPage - 1) * parsedLimit;
 		const searchRegex = new RegExp(search_query, "i");
 
-		const query = search_query ? { title: { $regex: searchRegex } } : {};
+		const query = { ...(search_query && { name: { $regex: searchRegex } }), ...(category && category.toLowerCase() !== "all" && { category }) };
 
 		const dishes = await Product.find(query).skip(skip).limit(parsedLimit);
 
@@ -29,6 +29,12 @@ export async function getDishes({ limit = 12, page = 1, search_query = "" }) {
 				totalPages,
 				hasNextPage: parsedPage < totalPages,
 				hasPrevPage: parsedPage > 1,
+			},
+			params: {
+				limit,
+				page,
+				search_query,
+				category,
 			},
 		};
 	} catch (error) {
@@ -55,9 +61,7 @@ export async function addToCart(formData) {
 	const exists = cart.find((item) => item.id == id);
 
 	if (exists) {
-		cart = cart.map((item) =>
-			item.id === id ? { ...item, quantity: item.quantity + 1 } : item
-		);
+		cart = cart.map((item) => (item.id === id ? { ...item, quantity: item.quantity + 1 } : item));
 	} else {
 		cart.push({ id, quantity: 1 });
 	}
@@ -73,9 +77,7 @@ export async function removeFromCart(formData) {
 	const exists = cart.find((item) => item.id === id);
 
 	if (exists && exists.quantity > 1) {
-		cart = cart.map((item) =>
-			item.id === id ? { ...item, quantity: item.quantity - 1 } : item
-		);
+		cart = cart.map((item) => (item.id === id ? { ...item, quantity: item.quantity - 1 } : item));
 	} else {
 		cart = cart.filter((item) => item.id !== id);
 	}

@@ -1,6 +1,17 @@
+"use client";
+
+import { useRouter } from "next/navigation";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
-export default function Pagination({ currentPage, totalPages, onPageChange }) {
+export default function Pagination({ currentPage, totalPages }) {
+	const router = useRouter();
+
+	const onPageChange = (page) => {
+		const searchParams = new URLSearchParams(window.location.search);
+		searchParams.set("page", page);
+		router.push(`?${searchParams.toString()}`);
+	};
+
 	const createPageArray = () => {
 		const pages = [];
 
@@ -10,13 +21,7 @@ export default function Pagination({ currentPage, totalPages, onPageChange }) {
 			if (currentPage <= 3) {
 				pages.push(1, 2, 3, "...", totalPages);
 			} else if (currentPage >= totalPages - 2) {
-				pages.push(
-					1,
-					"...",
-					totalPages - 2,
-					totalPages - 1,
-					totalPages
-				);
+				pages.push(1, "...", totalPages - 2, totalPages - 1, totalPages);
 			} else {
 				pages.push(1, "...", currentPage, "...", totalPages);
 			}
@@ -34,11 +39,8 @@ export default function Pagination({ currentPage, totalPages, onPageChange }) {
 				disabled={currentPage === 1}
 				onClick={() => onPageChange(currentPage - 1)}
 				className={`w-9 h-9 rounded-full flex items-center justify-center border transition cursor-pointer disabled:cursor-not-allowed ${
-					currentPage === 1
-						? "bg-gray-100 text-gray-400 cursor-not-allowed"
-						: "bg-white border-emerald-500 text-emerald-500 hover:bg-emerald-100"
-				}`}
-			>
+					currentPage === 1 ? "bg-gray-100 text-gray-400 cursor-not-allowed" : "bg-white border-emerald-500 text-emerald-500 hover:bg-emerald-100"
+				}`}>
 				<ChevronLeft size={16} />
 			</button>
 
@@ -53,11 +55,8 @@ export default function Pagination({ currentPage, totalPages, onPageChange }) {
 						key={index}
 						onClick={() => onPageChange(page)}
 						className={`w-9 h-9 rounded-full flex items-center justify-center border transition cursor-pointer disabled:cursor-not-allowed ${
-							page === currentPage
-								? "bg-emerald-500 text-white"
-								: "bg-white border-emerald-500 text-emerald-500 hover:bg-emerald-100"
-						}`}
-					>
+							page === currentPage ? "bg-emerald-500 text-white" : "bg-white border-emerald-500 text-emerald-500 hover:bg-emerald-100"
+						}`}>
 						{page}
 					</button>
 				)
@@ -68,11 +67,8 @@ export default function Pagination({ currentPage, totalPages, onPageChange }) {
 				disabled={currentPage === totalPages}
 				onClick={() => onPageChange(currentPage + 1)}
 				className={`w-9 h-9 rounded-full flex items-center justify-center border transition cursor-pointer disabled:cursor-not-allowed ${
-					currentPage === totalPages
-						? "bg-gray-100 text-gray-400 cursor-not-allowed"
-						: "bg-white border-emerald-500 text-emerald-500 hover:bg-emerald-100"
-				}`}
-			>
+					currentPage === totalPages ? "bg-gray-100 text-gray-400 cursor-not-allowed" : "bg-white border-emerald-500 text-emerald-500 hover:bg-emerald-100"
+				}`}>
 				<ChevronRight size={16} />
 			</button>
 		</div>

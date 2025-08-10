@@ -4,16 +4,15 @@ import InputField from "@/components/input-field";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useActionState, useRef } from "react";
-import { useAuth } from "@/context/AuthContext";
+import { registerUser } from "@/actions/auth";
 
 export default function RegisterPage() {
 	const router = useRouter();
-	const { register } = useAuth();
 
 	const action = async (prevState, formData) => {
-		const form = Object.fromEntries(formData.entries());
+		const form = Object.fromEntries(formData);
 
-		const data = await register(form);
+		const data = await registerUser(form);
 
 		if (!data.success) {
 			const fieldName = Object.keys(data.errors)[0];

@@ -1,13 +1,26 @@
+"use client";
+
 import { menu_list } from "@/lib/menu-list";
+import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
-export default function DropDownMenu({ value = "", setValue }) {
+export default function DropDownMenu({ value = "" }) {
 	const [isOpen, setIsOpen] = useState(false);
 	const ref = useRef(null);
+	const router = useRouter();
 
 	function handleToggle(name) {
 		setIsOpen(!isOpen);
-		if (name !== undefined) setValue(name);
+
+		if (!name) return;
+
+		const searchParams = new URLSearchParams(window.location.search);
+		if (name === "All") {
+			searchParams.delete("category");
+		} else {
+			searchParams.set("category", name);
+		}
+		router.push(`?${searchParams.toString()}`);
 	}
 
 	useEffect(() => {
@@ -33,7 +46,7 @@ export default function DropDownMenu({ value = "", setValue }) {
 					isOpen ? "visible opacity-100 scale-100" : "invisible opacity-0 scale-90"
 				}`}>
 				<button
-					onClick={() => handleToggle("")}
+					onClick={() => handleToggle("All")}
 					className={`block px-5 py-1.5 w-full text-left rounded transition duration-300 ease-in-out ${value === "" ? "bg-emerald-500 text-white" : "hover:bg-emerald-200"}`}>
 					All
 				</button>

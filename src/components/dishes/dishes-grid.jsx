@@ -1,16 +1,8 @@
-"use client";
-
 import Product from "../home/product";
 import Pagination from "./pagination";
 import ProductsSkeleton from "../skeletons/products-skeleton";
 
-export default function DishesGrid({
-	products,
-	loading,
-	page,
-	totalPages,
-	handlePageChange,
-}) {
+export default function DishesGrid({ products, loading, page, totalPages }) {
 	return (
 		<div>
 			{loading ? (
@@ -24,11 +16,7 @@ export default function DishesGrid({
 					</div>
 
 					{/* Pagination */}
-					<Pagination
-						totalPages={totalPages}
-						currentPage={page}
-						onPageChange={handlePageChange}
-					/>
+					<Pagination totalPages={totalPages} currentPage={page} />
 				</>
 			) : (
 				<div>No dishes found!</div>

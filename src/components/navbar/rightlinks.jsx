@@ -1,9 +1,7 @@
-"use client";
-
 import { ArrowRight, ShoppingCart, User2 } from "lucide-react";
 import { Suspense } from "react";
 import IconLink from "./icon-link";
-import { useAuth } from "@/context/AuthContext";
+import { getUser } from "@/actions/auth";
 
 export default function RightLinks() {
 	return (
@@ -27,8 +25,8 @@ export default function RightLinks() {
 	);
 }
 
-export function ProtectedLinks() {
-	const { user } = useAuth();
+export async function ProtectedLinks() {
+	const user = await getUser();
 	return (
 		<>
 			{user ? (
