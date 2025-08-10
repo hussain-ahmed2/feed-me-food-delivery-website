@@ -1,10 +1,14 @@
-"use client";
-
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
-export default function Pagination({ currentPage, totalPages }) {
-	const router = useRouter();
+export default function Pagination({ currentPage, totalPages, query: { limit, page, search_query, category } }) {
+	const getLink = (page) => {
+		const searchParams = new URLSearchParams();
+		if (search_query) searchParams.set("search_query", search_query);
+		if (category) searchParams.set("category", category);
+		searchParams.set("page", page);
+		return `?${searchParams.toString()}`;
+	};
 
 	const onPageChange = (page) => {
 		const searchParams = new URLSearchParams(window.location.search);
@@ -35,14 +39,14 @@ export default function Pagination({ currentPage, totalPages }) {
 	return (
 		<div className="flex gap-2 items-center justify-center mt-6">
 			{/* Previous */}
-			<button
-				disabled={currentPage === 1}
-				onClick={() => onPageChange(currentPage - 1)}
+			<Link
+				prefetch={true}
+				href={getLink(currentPage - 1)}
 				className={`w-9 h-9 rounded-full flex items-center justify-center border transition cursor-pointer disabled:cursor-not-allowed ${
-					currentPage === 1 ? "bg-gray-100 text-gray-400 cursor-not-allowed" : "bg-white border-emerald-500 text-emerald-500 hover:bg-emerald-100"
+					currentPage === 1 ? "bg-gray-100 text-gray-400 cursor-not-allowed pointer-events-none" : "bg-white border-emerald-500 text-emerald-500 hover:bg-emerald-100"
 				}`}>
 				<ChevronLeft size={16} />
-			</button>
+			</Link>
 
 			{/* Page Numbers */}
 			{pages.map((page, index) =>
@@ -51,26 +55,27 @@ export default function Pagination({ currentPage, totalPages }) {
 						...
 					</span>
 				) : (
-					<button
+					<Link
 						key={index}
-						onClick={() => onPageChange(page)}
+						prefetch={true}
+						href={getLink(page)}
 						className={`w-9 h-9 rounded-full flex items-center justify-center border transition cursor-pointer disabled:cursor-not-allowed ${
 							page === currentPage ? "bg-emerald-500 text-white" : "bg-white border-emerald-500 text-emerald-500 hover:bg-emerald-100"
 						}`}>
 						{page}
-					</button>
+					</Link>
 				)
 			)}
 
 			{/* Next */}
-			<button
-				disabled={currentPage === totalPages}
-				onClick={() => onPageChange(currentPage + 1)}
+			<Link
+				prefetch={true}
+				href={getLink(currentPage + 1)}
 				className={`w-9 h-9 rounded-full flex items-center justify-center border transition cursor-pointer disabled:cursor-not-allowed ${
-					currentPage === totalPages ? "bg-gray-100 text-gray-400 cursor-not-allowed" : "bg-white border-emerald-500 text-emerald-500 hover:bg-emerald-100"
+					currentPage === totalPages ? "bg-gray-100 text-gray-400 cursor-not-allowed pointer-events-none" : "bg-white border-emerald-500 text-emerald-500 hover:bg-emerald-100"
 				}`}>
 				<ChevronRight size={16} />
-			</button>
+			</Link>
 		</div>
 	);
 }

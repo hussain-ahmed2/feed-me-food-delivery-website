@@ -1,22 +1,22 @@
 import Product from "../home/product";
 import Pagination from "./pagination";
-import ProductsSkeleton from "../skeletons/products-skeleton";
+import { getDishes } from "@/actions/shop";
 
-export default function DishesGrid({ products, loading, page, totalPages }) {
+export default async function DishesGrid({ query: { page, limit, search_query, category } }) {
+	const { dishes, pagination } = await getDishes({ limit, page, search_query, category });
+
 	return (
 		<div>
-			{loading ? (
-				<ProductsSkeleton />
-			) : products.length ? (
+			{dishes.length ? (
 				<>
 					<div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-						{products.map((product) => (
+						{dishes.map((product) => (
 							<Product key={product._id} product={product} />
 						))}
 					</div>
 
 					{/* Pagination */}
-					<Pagination totalPages={totalPages} currentPage={page} />
+					<Pagination query={{ limit, page, search_query, category }} totalPages={Number(pagination.totalPages)} currentPage={Number(page)} />
 				</>
 			) : (
 				<div>No dishes found!</div>

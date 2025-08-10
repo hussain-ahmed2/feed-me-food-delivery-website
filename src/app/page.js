@@ -4,6 +4,8 @@ import Banner from "@/components/home/banner";
 import Menu from "@/components/home/explore-menu";
 import TopDishes from "@/components/home/top-dishes";
 
+export const dynamic = "force-static";
+
 export default async function Home() {
 	const { dishes } = await getDishes({ limit: 4 });
 

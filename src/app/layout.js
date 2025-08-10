@@ -5,7 +5,6 @@ import { ToastContainer } from "react-toastify";
 import Footer from "@/components/footer";
 import { Provider } from "@/context/NavbarContext";
 import { CartProvider } from "@/context/CartContext";
-import { AuthProvider } from "@/context/AuthContext";
 
 const outfit = Outfit({ subsets: ["latin"] });
 
