@@ -4,7 +4,7 @@ import { menu_list } from "@/lib/menu-list";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
-export default function DropDownMenu({ value = "" }) {
+export default function DropDownMenu({ value }) {
 	const [isOpen, setIsOpen] = useState(false);
 	const ref = useRef(null);
 	const router = useRouter();
@@ -38,7 +38,7 @@ export default function DropDownMenu({ value = "" }) {
 	return (
 		<div ref={ref} className="relative w-full max-w-60 min-w-32">
 			<button className="block px-5 py-1.5 bg-white border border-gray-200 w-full text-left hover:bg-emerald-100 rounded transition duration-300 ease-in-out" onClick={() => handleToggle()}>
-				{value ? value : "All"}
+				{value || "All"}
 			</button>
 
 			<div
@@ -47,7 +47,7 @@ export default function DropDownMenu({ value = "" }) {
 				}`}>
 				<button
 					onClick={() => handleToggle("All")}
-					className={`block px-5 py-1.5 w-full text-left rounded transition duration-300 ease-in-out ${value === "" ? "bg-emerald-500 text-white" : "hover:bg-emerald-200"}`}>
+					className={`block px-5 py-1.5 w-full text-left rounded transition duration-300 ease-in-out ${value === "All" ? "bg-emerald-500 text-white" : "hover:bg-emerald-200"}`}>
 					All
 				</button>
 				{menu_list.map((menu) => (
