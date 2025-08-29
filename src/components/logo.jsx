@@ -1,5 +1,5 @@
 "use client";
-import { NavbarContext } from "@/context/NavbarContext";
+import { useNavbarStore } from "@/store/navbar.store";
 import { use } from "react";
 
 export default function Logo() {
@@ -12,7 +12,8 @@ export default function Logo() {
 }
 
 export function NavbarLogo() {
-	const { closeMenu } = use(NavbarContext);
+	const setIsOpen = useNavbarStore((state) => state.setIsOpen);
+	const closeMenu = () => setIsOpen(false);
 
 	return (
 		<div onClick={closeMenu} className="font-black text-2xl">

@@ -1,8 +1,8 @@
 "use client";
 
+import { useNavbarStore } from "@/store/navbar.store";
 import Link from "next/link";
 import { use, useEffect, useRef } from "react";
-import { NavbarContext } from "@/context/NavbarContext";
 
 const links = [
 	{ name: "Home", href: "/" },
@@ -12,7 +12,10 @@ const links = [
 ];
 
 export default function NavLinks() {
-	const { isMenuOpen, closeMenu, setIsMenuOpen } = use(NavbarContext);
+	const setIsMenuOpen = useNavbarStore((state) => state.setIsOpen);
+	const isMenuOpen = useNavbarStore((state) => state.isOpen);
+
+	const closeMenu = () => setIsMenuOpen(false);
 	const ref = useRef(null);
 
 	useEffect(() => {

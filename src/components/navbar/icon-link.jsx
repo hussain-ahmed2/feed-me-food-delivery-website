@@ -1,10 +1,10 @@
 "use client";
+import { useNavbarStore } from "@/store/navbar.store";
 import Link from "next/link";
-import { NavbarContext } from "@/context/NavbarContext";
-import { use } from "react";
 
 export default function IconLink({ href, children }) {
-	const { closeMenu } = use(NavbarContext);
+	const setIsOpen = useNavbarStore((state) => state.setIsOpen);
+	const closeMenu = () => setIsOpen(false);
 	return (
 		<Link onClick={closeMenu} className="icon-link" href={href}>
 			{children}

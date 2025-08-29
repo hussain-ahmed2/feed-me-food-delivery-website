@@ -24,7 +24,7 @@ export async function getUser() {
 		await connectDB();
 		const user = await User.findById(id).select("-password");
 
-		return user;
+		return user.toObject();
 	} catch (error) {
 		console.error(error);
 		return null;
@@ -53,7 +53,7 @@ export async function registerUser(credentials = {}) {
 		const cookieStore = await cookies();
 		cookieStore.set("token", token);
 
-		return { success: true, data: user, message: "User registered successfully" };
+		return { success: true, data: { token }, token, message: "User registered successfully" };
 	} catch (error) {
 		console.error(error);
 		return { success: false, errors: { server: true }, message: "Something went wrong!" };
@@ -86,7 +86,7 @@ export async function loginUser(credentials = {}) {
 		const cookieStore = await cookies();
 		cookieStore.set("token", token);
 
-		return { success: true, data: { token, ...user }, message: "User logged in successfully" };
+		return { success: true, data: { token }, message: "User logged in successfully" };
 	} catch (error) {
 		console.error(error);
 		return { success: false, errors: { server: true }, message: "Something went wrong!" };
