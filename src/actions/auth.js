@@ -24,7 +24,7 @@ export async function getUser() {
 		await connectDB();
 		const user = await User.findById(id).select("-password");
 
-		return user.toObject();
+		return user?.toObject();
 	} catch (error) {
 		console.error(error);
 		return null;

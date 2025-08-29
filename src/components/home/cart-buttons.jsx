@@ -1,39 +1,13 @@
 "use client";
 
-import { useAuth } from "@/context/AuthContext";
-import { useCart } from "@/context/CartContext";
-import { useDebounce } from "@/hooks/useDebounce";
+import { useCartStore } from "@/store/cart.store";
 import { Minus, Plus } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
 
-export default function CartButtons({ id }) {
-	const { cart, updateCart } = useCart();
-	const { user } = useAuth();
-	const quantity = cart?.find((item) => (item?.product?._id?.toString() || item?.product?.toString()) === id.toString())?.quantity || 0;
-	const [count, setCount] = useState(quantity);
-	const debouncedCount = useDebounce(count, 1000);
-	const router = useRouter();
-
-	useEffect(() => {
-		if (quantity !== debouncedCount) updateCart(id, debouncedCount);
-	}, [debouncedCount]);
-
-	function handleIncrement() {
-		if (!user) {
-			router.push("/login");
-			return;
-		}
-		setCount((prev) => prev + 1);
-	}
-
-	function handleDecrement() {
-		if (!user) {
-			router.push("/login");
-			return;
-		}
-		setCount((prev) => prev - 1);
-	}
+export default function CartButtons({ product }) {
+	const addToCart = useCartStore((state) => state.addToCart);
+	const removeFromCart = useCartStore((state) => state.removeFromCart);
+	const cart = useCartStore((state) => state.cart);
+	const count = cart.find((item) => item._id === product._id)?.quantity || 0;
 
 	return (
 		<div className="absolute bottom-0 right-0 p-2">
@@ -42,7 +16,7 @@ export default function CartButtons({ id }) {
 					<div>
 						<button
 							disabled={count === 0}
-							onClick={handleDecrement}
+							onClick={() => removeFromCart(product._id)}
 							type="submit"
 							className="bg-rose-100 text-rose-500 p-2 rounded-full transition duration-300 hover:bg-rose-500 hover:text-white disabled:opacity-50">
 							<Minus />
@@ -53,7 +27,7 @@ export default function CartButtons({ id }) {
 				<div>
 					<button
 						disabled={count === 10}
-						onClick={handleIncrement}
+						onClick={() => addToCart(product)}
 						type="submit"
 						className="p-2 rounded-full bg-emerald-100 text-emerald-500 transition duration-300 hover:bg-emerald-500 hover:text-white">
 						<Plus />

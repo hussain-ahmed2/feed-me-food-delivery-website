@@ -2,7 +2,6 @@
 
 import { connectDB } from "@/mongodb/connectDB";
 import Product from "@/mongodb/models/product";
-import { cookies } from "next/headers";
 
 export async function getDishes({ limit = 12, page = 1, search_query = "", category = "All" }) {
 	try {
@@ -15,13 +14,13 @@ export async function getDishes({ limit = 12, page = 1, search_query = "", categ
 
 		const query = { ...(search_query && { name: { $regex: searchRegex } }), ...(category && category.toLowerCase() !== "all" && { category }) };
 
-		const dishes = await Product.find(query).skip(skip).limit(parsedLimit);
+		const dishes = await Product.find(query).skip(skip).limit(parsedLimit).lean();
 
 		const total = await Product.countDocuments(query);
 		const totalPages = Math.ceil(total / parsedLimit);
 
 		return {
-			dishes,
+			dishes: dishes.map((dish) => ({ ...dish, quantity: 0, _id: dish._id.toString() })),
 			pagination: {
 				total,
 				limit: parsedLimit,
@@ -51,76 +50,4 @@ export async function getDishes({ limit = 12, page = 1, search_query = "", categ
 			},
 		};
 	}
-}
-
-export async function addToCart(formData) {
-	const id = formData.get("id");
-	const cartCookie = (await cookies()).get("cart")?.value;
-	let cart = cartCookie ? JSON.parse(cartCookie) : [];
-
-	const exists = cart.find((item) => item.id == id);
-
-	if (exists) {
-		cart = cart.map((item) => (item.id === id ? { ...item, quantity: item.quantity + 1 } : item));
-	} else {
-		cart.push({ id, quantity: 1 });
-	}
-	console.log(id, cart);
-	(await cookies()).set("cart", JSON.stringify(cart));
-}
-
-export async function removeFromCart(formData) {
-	const id = formData.get("id");
-	const cartCookie = (await cookies()).get("cart")?.value;
-	let cart = cartCookie ? JSON.parse(cartCookie) : [];
-
-	const exists = cart.find((item) => item.id === id);
-
-	if (exists && exists.quantity > 1) {
-		cart = cart.map((item) => (item.id === id ? { ...item, quantity: item.quantity - 1 } : item));
-	} else {
-		cart = cart.filter((item) => item.id !== id);
-	}
-	(await cookies()).set("cart", JSON.stringify(cart));
-}
-
-export async function deleteFromCart(formData) {
-	const id = formData.get("id");
-	const cartCookie = (await cookies()).get("cart")?.value;
-	let cart = cartCookie ? JSON.parse(cartCookie) : [];
-
-	cart = cart.filter((item) => item.id !== id);
-
-	(await cookies()).set("cart", JSON.stringify(cart));
-}
-
-export async function getQuantity(id) {
-	const cartCookie = (await cookies()).get("cart")?.value;
-	const cart = cartCookie ? JSON.parse(cartCookie) : [];
-
-	const item = cart.find((item) => item.id === id);
-	return item ? item.quantity : 0;
-}
-
-export async function getCart() {
-	const cartCookie = (await cookies()).get("cart")?.value;
-	const cart = cartCookie ? JSON.parse(cartCookie) : [];
-
-	if (!cart.length) return [];
-
-	await connectDB();
-
-	const ids = cart.map((item) => item.id);
-
-	const dishes = await Product.find({ _id: { $in: ids } }).lean();
-
-	const cartWithDetails = dishes.map((dish) => {
-		const item = cart.find((c) => c.id == dish._id);
-		return {
-			...dish,
-			quantity: item?.quantity || 0,
-		};
-	});
-
-	return cartWithDetails;
 }

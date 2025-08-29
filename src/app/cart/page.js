@@ -3,21 +3,20 @@
 import Add from "@/components/Add";
 import CartButtons from "@/components/CartButtons";
 import Remove from "@/components/Remove";
-import { useCart } from "@/context/CartContext";
+import { useCartStore } from "@/store/cart.store";
 import { Trash2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
 export default function CartPage() {
-	const { cart, removeFromCart, loading } = useCart();
+	const cart = useCartStore((state) => state.cart);
+	const removeFromCart = useCartStore((state) => state.removeFromCart);
 
 	return (
 		<div className="page animate-fade-in">
 			<h1 className="heading mb-10">Cart</h1>
 			<div>
-				{loading ? (
-					<div>Loading...</div>
-				) : cart.length ? (
+				{cart.length > 0 ? (
 					<div className="flex flex-col">
 						<div className="flex items-center justify-between text-center font-semibold md:text-lg border-b-2 border-gray-300 pb-4">
 							<div className="w-1/6">Image</div>

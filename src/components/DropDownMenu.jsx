@@ -20,6 +20,7 @@ export default function DropDownMenu({ value }) {
 		} else {
 			searchParams.set("category", name);
 		}
+		searchParams.set("page", 1);
 		router.push(`?${searchParams.toString()}`);
 	}
 
