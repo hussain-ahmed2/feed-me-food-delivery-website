@@ -1,7 +1,8 @@
-import { ArrowRight, ShoppingCart, User2 } from "lucide-react";
+import { ArrowRight, User2 } from "lucide-react";
 import { Suspense } from "react";
 import IconLink from "./icon-link";
 import { getUser } from "@/actions/auth";
+import CartIconWithCount from "./cart-icon-with-count";
 
 export default function RightLinks() {
 	return (
@@ -9,10 +10,7 @@ export default function RightLinks() {
 			<li>
 				<IconLink href="/cart">
 					<div className="flex item-center gap-1.5">
-						<span className="relative">
-							<ShoppingCart />
-							<div className={`h-1.25 w-1.25 rounded-full bg-emerald-500 absolute top-0 right-0 transition duration-300 ${0 ? "" : "opacity-0 invisible"}`}></div>
-						</span>
+						<CartIconWithCount />
 						Cart
 					</div>
 				</IconLink>

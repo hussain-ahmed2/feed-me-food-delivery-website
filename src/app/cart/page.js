@@ -10,7 +10,7 @@ import Link from "next/link";
 
 export default function CartPage() {
 	const cart = useCartStore((state) => state.cart);
-	const removeFromCart = useCartStore((state) => state.removeFromCart);
+	const deleteFromCart = useCartStore((state) => state.deleteFromCart);
 
 	return (
 		<div className="page animate-fade-in">
@@ -29,23 +29,23 @@ export default function CartPage() {
 						{cart.map((item) => (
 							<div className="flex items-center justify-between text-center border-b border-gray-300 py-4" key={item._id}>
 								<div className="w-1/6">
-									<Image className="w-full object-cover" src={item.product.image} width={100} height={100} alt={item.product.name} />
+									<Image className="w-full object-cover" src={item.image} width={100} height={100} alt={item.name} />
 								</div>
-								<div className="w-1/6">{item.product.name}</div>
-								<div className="w-1/6">${item.product.price}</div>
+								<div className="w-1/6">{item.name}</div>
+								<div className="w-1/6">${item.price}</div>
 								<div className="w-1/6 flex items-center gap-1 justify-center">
 									<CartButtons item={item} />
 								</div>
-								<div className="w-1/6">${(item.quantity * item.product.price).toFixed(2)}</div>
+								<div className="w-1/6">${(item.quantity * item.price).toFixed(2)}</div>
 								<div className="w-1/6">
-									<button onClick={() => removeFromCart(item.product._id)}>
+									<button className="p-2 rounded-md hover:text-rose-500 hover:bg-rose-100 transition duration-300" onClick={() => deleteFromCart(item._id)}>
 										<Trash2 />
 									</button>
 								</div>
 							</div>
 						))}
 						<div className="flex items-center gap-8 justify-end py-4">
-							<div className="font-medium">Grand Total: ${cart.reduce((acc, item) => item.quantity * item.product.price + acc, 0)}</div>
+							<div className="font-medium">Grand Total: ${cart.reduce((acc, item) => item.quantity * item.price + acc, 0)}</div>
 							<div className="">
 								<Link href="/order" className="btn px-10 py-3 text-center">
 									Checkout

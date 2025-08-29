@@ -5,7 +5,7 @@ export default function CartButtons({ item }) {
 	return (
 		<>
 			<Remove item={item} />
-			<div>x{count}</div>
+			<div>x{item.quantity}</div>
 			<Add item={item} />
 		</>
 	);
