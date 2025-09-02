@@ -8,6 +8,7 @@ export default function SearchDishes() {
 	function handleSearch(searchQ) {
 		const searchParams = new URLSearchParams(window.location.search);
 		searchParams.set("search_query", searchQ);
+		searchParams.set("page", 1);
 		router.push(`?${searchParams.toString()}`);
 	}
 
