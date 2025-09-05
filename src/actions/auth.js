@@ -1,7 +1,7 @@
 "use server";
 
 import { decodeToken, generateToken } from "@/lib/utils";
-import { getZodErrors, loginSchema, registerSchema } from "@/lib/validation-schema";
+import { getZodErrors, loginSchema, profileSchema, registerSchema } from "@/lib/validation-schema";
 import { connectDB } from "@/mongodb/connectDB";
 import User from "@/mongodb/models/user";
 import { cookies } from "next/headers";
@@ -89,6 +89,59 @@ export async function loginUser(credentials = {}) {
 		return { success: true, data: { token }, message: "User logged in successfully" };
 	} catch (error) {
 		console.error(error);
+		return { success: false, errors: { server: true }, message: "Something went wrong!" };
+	}
+}
+
+export async function updateUserProfile(profileData = {}) {
+	try {
+		// Get current user
+		const user = await getUser();
+		if (!user) {
+			return { success: false, errors: { auth: "Not authenticated" }, message: "Please login again" };
+		}
+
+		// Validate input
+		const { success, data, error } = profileSchema.safeParse(profileData);
+		if (!success) {
+			return { success: false, errors: getZodErrors(error), message: "Validation failed" };
+		}
+
+		await connectDB();
+
+		// Check if email is already taken by another user
+		if (data.email !== user.email) {
+			const existingUser = await User.findOne({
+				email: data.email,
+				_id: { $ne: user._id },
+			});
+
+			if (existingUser) {
+				return {
+					success: false,
+					errors: { email: "Email is already taken" },
+					message: "Email already exists",
+				};
+			}
+		}
+
+		// Update user
+		const updatedUser = await User.findByIdAndUpdate(
+			user._id,
+			{
+				name: data.name,
+				email: data.email,
+			},
+			{ new: true, select: "-password" }
+		);
+
+		if (!updatedUser) {
+			return { success: false, errors: { server: true }, message: "Failed to update profile" };
+		}
+
+		return { success: true, data: JSON.parse(JSON.stringify(updatedUser)), message: "Profile updated successfully" };
+	} catch (error) {
+		console.error("Update profile error:", error);
 		return { success: false, errors: { server: true }, message: "Something went wrong!" };
 	}
 }

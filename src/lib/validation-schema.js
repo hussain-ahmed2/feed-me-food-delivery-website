@@ -26,3 +26,8 @@ export function getZodErrors(error) {
 
 	return result;
 }
+
+export const profileSchema = z.object({
+	name: z.string().min(1, "Name is required").max(50, "Name must be less than 50 characters"),
+	email: z.string().email("Please enter a valid email address").min(1, "Email is required"),
+});
