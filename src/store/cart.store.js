@@ -5,13 +5,14 @@ export const useCartStore = create(
 	persist(
 		(set, get) => ({
 			cart: [],
+			clearCart: () => set({ cart: [] }),
 			addToCart: (product) => {
 				const cart = get().cart;
 				const exists = cart.find((item) => item._id === product._id);
 				if (exists) {
 					set({ cart: cart.map((item) => (item._id === product._id ? { ...item, quantity: item.quantity + 1 } : item)) });
 				} else {
-					set({ cart: [...cart, { ...product, quantity: 1 }] });
+					set({ cart: [...cart, { ...product, _id: product._id.toString(), quantity: 1 }] });
 				}
 			},
 			removeFromCart: (_id) => {

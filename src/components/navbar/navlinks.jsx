@@ -3,6 +3,8 @@
 import { useNavbarStore } from "@/store/navbar.store";
 import Link from "next/link";
 import { use, useEffect, useRef } from "react";
+import IconLink from "./icon-link";
+import { ScrollTextIcon } from "lucide-react";
 
 const links = [
 	{ name: "Home", href: "/" },
@@ -43,6 +45,11 @@ export default function NavLinks() {
 					</Link>
 				</li>
 			))}
+			<li className="md:hidden">
+				<Link onClick={closeMenu} className="nav-link" href="/orders">
+					Orders
+				</Link>
+			</li>
 		</ul>
 	);
 }

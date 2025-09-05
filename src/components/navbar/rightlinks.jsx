@@ -1,4 +1,4 @@
-import { ArrowRight, User2 } from "lucide-react";
+import { ArrowRight, ScrollTextIcon, User2 } from "lucide-react";
 import { Suspense } from "react";
 import IconLink from "./icon-link";
 import { getUser } from "@/actions/auth";
@@ -28,13 +28,22 @@ export async function ProtectedLinks() {
 	return (
 		<>
 			{user ? (
-				<li>
-					<IconLink href="/profile">
-						<div className="flex items-center gap-1.5">
-							<User2 /> Profile
-						</div>
-					</IconLink>
-				</li>
+				<>
+					<li className="hidden md:block">
+						<IconLink href="/orders">
+							<div className="flex items-center gap-1.5">
+								<ScrollTextIcon /> Orders
+							</div>
+						</IconLink>
+					</li>
+					<li>
+						<IconLink href="/profile">
+							<div className="flex items-center gap-1.5">
+								<User2 /> Profile
+							</div>
+						</IconLink>
+					</li>
+				</>
 			) : (
 				<li>
 					<IconLink href="/login">
